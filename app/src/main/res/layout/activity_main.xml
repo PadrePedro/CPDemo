@@ -14,6 +14,8 @@
 
     <EditText
         android:id="@+id/urlEditText"
+        android:inputType="textUri"
+        android:layout_alignBaseline="@id/urlTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/urlTextView"/>
@@ -28,6 +30,7 @@
     <EditText
         android:id="@+id/countEditText"
         android:inputType="number"
+        android:layout_alignBaseline="@id/countTextView"
         android:layout_width="match_parent"
         android:layout_below="@id/urlEditText"
         android:layout_height="wrap_content"

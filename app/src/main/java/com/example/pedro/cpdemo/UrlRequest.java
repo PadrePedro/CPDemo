@@ -1,5 +1,17 @@
 package com.example.pedro.cpdemo;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+
 /**
  * Created by pedro on 1/31/15.
  */
@@ -30,15 +42,34 @@ public class UrlRequest implements Runnable {
         startTimestamp = System.currentTimeMillis();
         if (callback != null)
             callback.onRequestStarted();
+
+
+        HttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 1000 * 30);
+        HttpConnectionParams.setSoTimeout(httpParameters, 1000 * 30);
+        HttpClient httpclient = new DefaultHttpClient(httpParameters);
+
+        HttpGet httpget = new HttpGet(url);
         try {
-            int sleep = (int)(Math.random() * 5000);
-            Thread.sleep(sleep);
-            httpStatus = 200;
-            text = "Random text " + Integer.toString(sleep);
+            HttpResponse response = httpclient.execute(httpget);
+            if (response != null) {
+                text = EntityUtils.toString(response.getEntity(), "UTF-8");
+                httpStatus = response.getStatusLine().getStatusCode();
+            }
         }
-        catch (InterruptedException e) {
+        catch (IOException e) {
 
         }
+
+//        try {
+//            int sleep = (int)(Math.random() * 5000);
+//            Thread.sleep(sleep);
+//            httpStatus = 200;
+//            text = "Random text " + Integer.toString(sleep);
+//        }
+//        catch (InterruptedException e) {
+//
+//        }
         stopTimestamp = System.currentTimeMillis();
         if (callback != null)
             callback.onRequestStopped();

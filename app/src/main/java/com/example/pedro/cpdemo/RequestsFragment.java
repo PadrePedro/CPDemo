@@ -3,9 +3,9 @@ package com.example.pedro.cpdemo;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ArrayAdapter;
-
-import org.apache.http.client.methods.HttpUriRequest;
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -53,5 +53,13 @@ public class RequestsFragment extends ListFragment implements UrlRequest.Request
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        String text = requests.get(position).getText();
+        if (text != null)
+            ResponseDialogFragment.showResponse((FragmentActivity)getActivity(), position, text);
     }
 }
