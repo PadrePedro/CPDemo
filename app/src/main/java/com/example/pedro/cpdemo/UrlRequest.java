@@ -71,6 +71,8 @@ public class UrlRequest implements Runnable {
     public String toString() {
         if (stopTimestamp > 0)
             return String.format("Fetch %d: HTTP %d, %dms, %d bytes", id, httpStatus, getDuration(), getSize());
+        if (startTimestamp > 0)
+            return String.format("Fetch %d: ...", id);
         return String.format("Fetch %d", id);
     }
 

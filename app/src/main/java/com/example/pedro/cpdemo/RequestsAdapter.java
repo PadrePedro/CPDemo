@@ -33,13 +33,6 @@ public class RequestsAdapter extends ArrayAdapter<UrlRequest> {
         UrlRequest request = objects.get(position);
         TextView textViewItem = (TextView) convertView.findViewById(R.id.textViewItem);
         textViewItem.setText(request.toString());
-//        if (request.getDuration() > 0) {
-//            textViewItem.setText(String.format("Fetch %d: HTTP: %d, %dms, %d bytes", position, request.getHttpStatus(), request.getDuration(), request.getSize()));
-//        }
-//        else {
-//            // request still processing, so just show fetch id
-//            textViewItem.setText(String.format("Fetch %d:", position));
-//        }
         return convertView;
     }
 }

@@ -57,7 +57,13 @@ public class RequestsFragment extends ListFragment implements UrlRequest.Request
 
     @Override
     public void onRequestStarted() {
-
+        // must post message for processing since this is called on non-UI thread
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
