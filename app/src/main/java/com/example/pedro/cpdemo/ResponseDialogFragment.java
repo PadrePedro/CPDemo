@@ -1,18 +1,17 @@
 package com.example.pedro.cpdemo;
 
-import com.example.pedro.cpdemo.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 /**
+ * Displays the text returned for each request
+ *
  * Created by pedro on 2/1/15.
  */
 public class ResponseDialogFragment extends DialogFragment {

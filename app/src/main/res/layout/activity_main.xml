@@ -31,10 +31,28 @@
         android:id="@+id/countEditText"
         android:inputType="number"
         android:layout_alignBaseline="@id/countTextView"
-        android:layout_width="match_parent"
+        android:layout_width="80dp"
         android:layout_below="@id/urlEditText"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/countTextView"/>
+
+    <TextView
+        android:id="@+id/threadsTextView"
+        android:text="Threads"
+        android:layout_below="@id/urlEditText"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/countEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/threadsEditText"
+        android:inputType="number"
+        android:layout_alignBaseline="@id/countTextView"
+        android:layout_width="80dp"
+        android:layout_below="@id/urlEditText"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/threadsTextView"/>
 
     <Button
         android:id="@+id/goButton"
@@ -50,10 +68,5 @@
         android:layout_below="@id/goButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <!--<ListView-->
-        <!--android:id="@+id/requestsListView"-->
-        <!--android:layout_below="@id/goButton"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
 
 </RelativeLayout>

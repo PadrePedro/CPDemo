@@ -1,7 +1,6 @@
 package com.example.pedro.cpdemo;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -13,12 +12,16 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
 /**
+ * Encapsulates the data to be tracked for each individual request
+ *
  * Created by pedro on 1/31/15.
  */
 public class UrlRequest implements Runnable {
 
     interface RequestStatusCallback {
+        // called when starting to process request
         void onRequestStarted();
+        // called when requested processed
         void onRequestStopped();
     }
 
@@ -27,7 +30,7 @@ public class UrlRequest implements Runnable {
     private long startTimestamp;
     private long stopTimestamp;
     private int httpStatus;
-    private int bytes;
+    private long bytes;
     private String text;
     private RequestStatusCallback callback;
 
@@ -43,33 +46,22 @@ public class UrlRequest implements Runnable {
         if (callback != null)
             callback.onRequestStarted();
 
-
         HttpParams httpParameters = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParameters, 1000 * 30);
         HttpConnectionParams.setSoTimeout(httpParameters, 1000 * 30);
         HttpClient httpclient = new DefaultHttpClient(httpParameters);
-
         HttpGet httpget = new HttpGet(url);
         try {
             HttpResponse response = httpclient.execute(httpget);
             if (response != null) {
                 text = EntityUtils.toString(response.getEntity(), "UTF-8");
+                bytes = text.length();
                 httpStatus = response.getStatusLine().getStatusCode();
             }
         }
         catch (IOException e) {
 
         }
-
-//        try {
-//            int sleep = (int)(Math.random() * 5000);
-//            Thread.sleep(sleep);
-//            httpStatus = 200;
-//            text = "Random text " + Integer.toString(sleep);
-//        }
-//        catch (InterruptedException e) {
-//
-//        }
         stopTimestamp = System.currentTimeMillis();
         if (callback != null)
             callback.onRequestStopped();
@@ -78,8 +70,8 @@ public class UrlRequest implements Runnable {
     @Override
     public String toString() {
         if (stopTimestamp > 0)
-            return String.format("Fetch %d: HTTP %d, %dms, %d bytes");
-        return "Fetch " + Integer.toString(id);
+            return String.format("Fetch %d: HTTP %d, %dms, %d bytes", id, httpStatus, getDuration(), getSize());
+        return String.format("Fetch %d", id);
     }
 
     public long getDuration() {
@@ -90,8 +82,8 @@ public class UrlRequest implements Runnable {
         return text;
     }
 
-    public int getSize() {
-        return text != null ? text.length() : 0;
+    public long getSize() {
+        return bytes;
     }
 
     public int getHttpStatus () {

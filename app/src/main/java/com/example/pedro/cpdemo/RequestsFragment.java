@@ -12,17 +12,31 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
+ * This fragment encapsulates the listview that queries and displays the network requests.
+ *
  * Created by pedro on 1/31/15.
  */
 public class RequestsFragment extends ListFragment implements UrlRequest.RequestStatusCallback {
 
+    // requests being made
     private ArrayList<UrlRequest> requests;
     private Executor executor;
+    private int threadCount;
+    // maps data to view to be displayed
     private RequestsAdapter adapter;
     private Handler handler;
 
-    public void getUrl(String url, int count) {
-        executor = Executors.newFixedThreadPool(10);
+    /**
+     * Requests url count times. Results are displayed in ListView in realtime.
+     * @param url
+     * @param count
+     */
+    public void getUrl(String url, int count, int threadCount) {
+        getView().setVisibility(View.VISIBLE);
+        if (executor == null || threadCount != this.threadCount) {
+            this.threadCount = threadCount;
+            executor = Executors.newFixedThreadPool(this.threadCount);
+        }
         requests = new ArrayList<UrlRequest>();
 
         for (int i=0;i<count;i++) {
@@ -37,6 +51,7 @@ public class RequestsFragment extends ListFragment implements UrlRequest.Request
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getView().setVisibility(View.INVISIBLE);
         handler = new Handler();
     }
 
@@ -45,8 +60,12 @@ public class RequestsFragment extends ListFragment implements UrlRequest.Request
 
     }
 
+    /**
+     * Called when a request is completed.  We instruct the adapter to update the listview.
+     */
     @Override
     public void onRequestStopped() {
+        // must post message for processing since this is called on non-UI thread
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -55,11 +74,16 @@ public class RequestsFragment extends ListFragment implements UrlRequest.Request
         });
     }
 
+    /**
+     * Handle user selection of request item
+     */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         String text = requests.get(position).getText();
-        if (text != null)
-            ResponseDialogFragment.showResponse((FragmentActivity)getActivity(), position, text);
+        if (text != null) {
+            // display result fragment only if text is not empty
+            ResponseDialogFragment.showResponse((FragmentActivity) getActivity(), position, text);
+        }
     }
 }
