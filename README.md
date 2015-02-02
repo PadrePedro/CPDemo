@@ -14,3 +14,4 @@ states:
 The listview is updated as each request transitions through the different states.
 Touching any request that has been completed will show the response for that request.
 
+Install app-debug.apk to run this app without having to build it.
